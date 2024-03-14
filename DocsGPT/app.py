@@ -13,7 +13,7 @@ import os
 
 # Set web page title and icon.
 st.set_page_config(
-    page_title="Chat with PDF",
+    page_title="Chat with SourceBot",
     page_icon=":robot:"
 )
 
@@ -48,7 +48,7 @@ callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
 def format_llama_prompt(user_prompt):
     prompt = """\
 <s>[INST] <<SYS>>
-You are a helpful, respectful Human Resource assistant. Always answer as helpfully as possible.  Your answers should not include any harmful, offensive, dangerous, or illegal content.
+You are a helpful, respectful assistant. Always answer as helpfully as possible.
 
 If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please ask for more details.It is also important to provide the filename and the page number
 <</SYS>>
@@ -64,15 +64,14 @@ if user_input:
 
 
     URL = "https://llama-2-7b-chat-perfconf-hackathon.apps.dripberg-dgx2.rdu3.labs.perfscale.redhat.com"
-
     endpoint = "/generate"
-
     headers = {
         "Content-Type": "application/json"
     }
 
     # Perform similarity search for the user input.
     docs = db.similarity_search(user_input)
+    print (docs)
 
 
     res_string = docs[0].page_content

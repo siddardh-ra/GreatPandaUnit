@@ -13,22 +13,21 @@ import os
 
 # Set web page title and icon.
 st.set_page_config(
-    page_title="Chat with PDF",
+    page_title="Chat with Reports",
     page_icon=":robot:"
 )
 
-# Set web page title and markdown.
-st.title('💬 Chat with PDF 📄 (Powered by Llama 2 🦙🦙)')
+st.title('SoS Report Bot 💬 ')
+
 st.markdown(
     """
-    This is the demonstration of a chatbot with PDF with Llama 2, Chroma, and Streamlit.
-    I read the book Machine Learning Yearning by Andrew Ng. Please ask me any questions about this book.
+    This is a chatbot for Q & A for SoS Reports and logs
     """
 )
 
 # Define a function to get user input.
 def get_input_text():
-    input_text = st.text_input("Ask a question about your PDF:")
+    input_text = st.text_input("Ask a question about your log:")
     return input_text
 
 # Define to variables to use "sentence-transformers/all-MiniLM-L6-v2" embedding model from HuggingFace.
@@ -46,11 +45,7 @@ callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
 
 def format_llama_prompt(user_prompt):
     prompt = """\
-<s>[INST] <<SYS>>
-You are a helpful, respectful Human Resource assistant. Always answer as helpfully as possible.  Your answers should not include any harmful, offensive, dangerous, or illegal content.
-
-If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please ask for more details.It is also important to provide the filename and the page number
-<</SYS>>
+<s>[INST] 
 
 {user_prompt}[/INST]\
 """
@@ -74,11 +69,13 @@ if user_input:
     docs = db.similarity_search(user_input)
 
 
-    res_string = docs[0].page_content
-    metadata = docs[0].metadata
+    # res_string = docs[0].page_content
+    # metadata = docs[0].metadata
+    #
+    # res_string = res_string.replace("\n"," ")
+    # res_string=res_string + f'The above content was taken from the file {metadata["source"]}and page number is {metadata["page"]}'
 
-    res_string = res_string.replace("\n"," ")
-    res_string=res_string + f'The above content was taken from the file {metadata["source"]}and page number is {metadata["page"]}'
+    res_string = docs[0]
 
     data = {
         "inputs": format_llama_prompt(res_string),

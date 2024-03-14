@@ -15,7 +15,7 @@ documents.extend(pdfLoader.load())
 
 print(f'You have {len(documents)} document(s) in your data folder.')
 
-text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+text_splitter = CharacterTextSplitter(chunk_size=256, chunk_overlap=200)
 documents = text_splitter.split_documents(documents)
 print(len(documents))
 
